@@ -17,6 +17,7 @@ import (
 var (
     // Load DLL
     sdl, _ = syscall.LoadLibrary("SDL.dll")
+    sdl_image, _ = syscall.LoadLibrary("SDL_image.dll")
     
     // SDL
     SDL_Init, _ = syscall.GetProcAddress(sdl, "SDL_Init")
@@ -29,6 +30,10 @@ var (
     SDL_PollEvent, _ = syscall.GetProcAddress(sdl, "SDL_PollEvent")
     SDL_Flip, _ = syscall.GetProcAddress(sdl, "SDL_Flip")
     SDL_Delay, _ = syscall.GetProcAddress(sdl, "SDL_Delay")
+    SDL_UpperBlit, _ = syscall.GetProcAddress(sdl, "SDL_UpperBlit")
+    
+    // SDL_image
+    IMG_Load, _ = syscall.GetProcAddress(sdl_image, "IMG_Load")
 )
 
 type cast unsafe.Pointer
@@ -225,15 +230,12 @@ func (screen *Surface) Flip() int { return int(call(SDL_Flip, uintptr(cast(scree
 // Unlocks a previously locked surface.
 // func (screen *Surface) Unlock() int { return int(C.SDL_Flip((*C.SDL_Surface)(cast(screen)))) }
 
-// func (dst *Surface) Blit(dstrect *Rect, src *Surface, srcrect *Rect) int {
-	// var ret = C.SDL_UpperBlit(
-		// (*C.SDL_Surface)(cast(src)),
-		// (*C.SDL_Rect)(cast(srcrect)),
-		// (*C.SDL_Surface)(cast(dst)),
-		// (*C.SDL_Rect)(cast(dstrect)))
-
-	// return int(ret)
-// }
+func (dst *Surface) Blit(dstrect *Rect, src *Surface, srcrect *Rect) int {
+	var ret = call(SDL_UpperBlit,
+        uintptr(cast(src)), uintptr(cast(srcrect)),
+        uintptr(cast(dst)), uintptr(cast(dstrect)))
+	return int(ret)
+}
 
 // This function performs a fast fill of the given rectangle with some color.
 func (dst *Surface) FillRect(dstrect *Rect, color uint32) int {
@@ -269,10 +271,10 @@ func (dst *Surface) FillRect(dstrect *Rect, color uint32) int {
 // }
 
 // Loads Surface from file (using IMG_Load).
-// func Load(file string) *Surface {
-	// var screen = C.IMG_Load(cfile)
-	// return (*Surface)(cast(screen))
-// }
+func Load(file string) *Surface {
+	var screen = call(IMG_Load, uintptr(cast(syscall.StringBytePtr(file))))
+	return (*Surface)(cast(screen))
+}
 
 // Creates an empty Surface.
 // func CreateRGBSurface(flags uint32, width int, height int, bpp int, Rmask uint32, Gmask uint32, Bmask uint32, Amask uint32) *Surface {
