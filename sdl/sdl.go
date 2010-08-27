@@ -26,11 +26,13 @@ var (
     SDL_SetVideoMode, _ = syscall.GetProcAddress(sdl, "SDL_SetVideoMode")
     SDL_WM_SetCaption, _ = syscall.GetProcAddress(sdl, "SDL_WM_SetCaption")
     SDL_FillRect, _ = syscall.GetProcAddress(sdl, "SDL_FillRect")
+    SDL_SetAlpha, _ = syscall.GetProcAddress(sdl, "SDL_SetAlpha")
     SDL_InitSubSystem, _ = syscall.GetProcAddress(sdl, "SDL_InitSubSystem")
     SDL_PollEvent, _ = syscall.GetProcAddress(sdl, "SDL_PollEvent")
     SDL_Flip, _ = syscall.GetProcAddress(sdl, "SDL_Flip")
     SDL_Delay, _ = syscall.GetProcAddress(sdl, "SDL_Delay")
     SDL_UpperBlit, _ = syscall.GetProcAddress(sdl, "SDL_UpperBlit")
+    SDL_GetMouseState, _ = syscall.GetProcAddress(sdl, "SDL_GetMouseState")
     
     // SDL_image
     IMG_Load, _ = syscall.GetProcAddress(sdl_image, "IMG_Load")
@@ -244,9 +246,9 @@ func (dst *Surface) FillRect(dstrect *Rect, color uint32) int {
 }
 
 // Adjusts the alpha properties of a Surface.
-// func (s *Surface) SetAlpha(flags uint32, alpha uint8) int {
-	// return int(C.SDL_SetAlpha((*C.SDL_Surface)(cast(s)), C.Uint32(flags), C.Uint8(alpha)))
-// }
+func (s *Surface) SetAlpha(flags uint32, alpha uint8) int {
+	return int(call(SDL_SetAlpha, uintptr(cast(s)), uintptr(flags), uintptr(alpha)))
+}
 
 // Gets the clipping rectangle for a surface.
 // func (s *Surface) GetClipRect(r *Rect) {
@@ -324,9 +326,9 @@ type Mod int
 type Key int
 
 // Retrieves the current state of the mouse.
-// func GetMouseState(x, y *int) uint8 {
-	// return uint8(C.SDL_GetMouseState((*C.int)(cast(x)), (*C.int)(cast(y))))
-// }
+func GetMouseState(x, y *int) uint8 {
+	return uint8(call(SDL_GetMouseState, uintptr((cast(x))), uintptr(cast(y))))
+}
 
 // Retrieves the current state of the mouse relative to the last time this
 // function was called.
