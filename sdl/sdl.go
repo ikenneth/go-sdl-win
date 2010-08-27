@@ -1,14 +1,6 @@
 // SDL binding from SDL.dll
 package sdl
 
-
-// struct private_hwdata{};
-// struct SDL_BlitMap{};
-// #define map _map
-//
-// #include <SDL/SDL.h>
-// #include <SDL/SDL_image.h>
-// static void SetError(const char* description){SDL_SetError("%s",description);}
 import (
     "syscall"
     "unsafe"
