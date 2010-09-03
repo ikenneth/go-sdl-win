@@ -1,0 +1,8 @@
+syntax: glob
+*.8
+*.exe
+*.bak
+*.dll
+*.a
+*.py
+*.ttf

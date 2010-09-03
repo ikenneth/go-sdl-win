@@ -22,6 +22,7 @@ var (
     SDL_InitSubSystem, _ = syscall.GetProcAddress(sdl, "SDL_InitSubSystem")
     SDL_PollEvent, _ = syscall.GetProcAddress(sdl, "SDL_PollEvent")
     SDL_Flip, _ = syscall.GetProcAddress(sdl, "SDL_Flip")
+    SDL_GetTicks, _ = syscall.GetProcAddress(sdl, "SDL_GetTicks")
     SDL_Delay, _ = syscall.GetProcAddress(sdl, "SDL_Delay")
     SDL_UpperBlit, _ = syscall.GetProcAddress(sdl, "SDL_UpperBlit")
     SDL_GetMouseState, _ = syscall.GetProcAddress(sdl, "SDL_GetMouseState")
@@ -399,7 +400,7 @@ func (event *Event) Poll() bool {
 // Time
 
 // Gets the number of milliseconds since the SDL library initialization.
-// func GetTicks() uint32 { return uint32(C.SDL_GetTicks()) }
+func GetTicks() uint32 { return uint32(call(SDL_GetTicks)) }
 
 // Waits a specified number of milliseconds before returning.
 func Delay(ms uint32) { call(SDL_Delay, uintptr(ms)) }
