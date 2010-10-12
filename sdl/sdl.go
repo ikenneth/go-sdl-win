@@ -353,13 +353,13 @@ func (event *Event) Poll() bool {
 }
 
 // Returns KeyboardEvent or nil if event has other type
-// func (event *Event) Keyboard() *KeyboardEvent {
-	// if event.Type == KEYUP || event.Type == KEYDOWN {
-		// return (*KeyboardEvent)(cast(event))
-	// }
+func (event *Event) Keyboard() *KeyboardEvent {
+	if event.Type == KEYUP || event.Type == KEYDOWN {
+		return (*KeyboardEvent)(cast(event))
+	}
 
-	// return nil
-// }
+	return nil
+}
 
 // Returns MouseButtonEvent or nil if event has other type
 // func (event *Event) MouseButton() *MouseButtonEvent {
