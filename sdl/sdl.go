@@ -26,6 +26,7 @@ var (
     SDL_Delay, _ = syscall.GetProcAddress(sdl, "SDL_Delay")
     SDL_UpperBlit, _ = syscall.GetProcAddress(sdl, "SDL_UpperBlit")
     SDL_GetMouseState, _ = syscall.GetProcAddress(sdl, "SDL_GetMouseState")
+    SDL_FreeSurface, _ = syscall.GetProcAddress(sdl, "SDL_FreeSurface")
     
     // SDL_image
     IMG_Load, _ = syscall.GetProcAddress(sdl_image, "IMG_Load")
@@ -215,7 +216,7 @@ func WM_SetCaption(title, icon string) {
 func (screen *Surface) Flip() int { return int(call(SDL_Flip, uintptr(cast(screen)))) }
 
 // Frees (deletes) a Surface
-// func (screen *Surface) Free() { C.SDL_FreeSurface((*C.SDL_Surface)(cast(screen))) }
+func (screen *Surface) Free() { call(SDL_FreeSurface, (uintptr(cast(screen)))) }
 
 // Locks a surface for direct access.
 // func (screen *Surface) Lock() int {
