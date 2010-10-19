@@ -49,7 +49,7 @@ func OpenFont(file string, ptsize int) *Font {
     return (*Font)(cast(font))
 }
 
-func CloseFont(font *Font) { call(TTF_CloseFont, uintptr(cast(font))) }
+func (f *Font) Close() { call(TTF_CloseFont, uintptr(cast(f))) }
 
 func RenderUTF8_Solid(font *Font, text string, color sdl.Color) *sdl.Surface {
     var surface uintptr
